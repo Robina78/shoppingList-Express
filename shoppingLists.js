@@ -1,20 +1,20 @@
 const express = require("express");
 const router = new express.Router();
 const ExpressError = require("./expressError");
-const shoppingLists = require("./fakeDb");
+const items = require("./fakeDb");
 
 router.get("/", (req, res) => {
-    res.json({shoppingLists})
+    res.json({items})
 });
 
 router.post("/", (req, res) => {
     const newItem = {name: req.body.name, price: req.body.price};
-    shoppingLists.push(newItem);
+    items.push(newItem);
     res.status(201).json({ shoppingList: newItem });
 });
 
 router.get("/:name", (req, res) => {
-    const foundItem = shoppingLists.find(item => item.name === req.params.name);
+    const foundItem = items.find(item => item.name === req.params.name);
     if(foundItem === undefined) {
         throw new ExpressError("Item not found", 404)
     }
@@ -22,20 +22,21 @@ router.get("/:name", (req, res) => {
 });
 
 router.patch("/:name", (req, res) => {
-    const foundItem = shoppingLists.find(item => item.name === req.params.name);
+    const foundItem = items.find(item => item.name === req.params.name);
     if ( foundItem === undefined ) {
         throw new ExpressError("Item not found", 404);
     }
     foundItem.name = req.body.name;
+    foundItem.price = req.body.price;
     res.json({ shoppingList: foundItem});
 });
 
 router.delete("/:name", (req, res) => {
-    const foundItem = shoppingLists.find(item => item.name === req.params.name);
+    const foundItem = items.find(item => item.name === req.params.name);
     if (foundItem === -1 ) {
         throw new ExpressError("Item not found", 404)
     }
-    shoppingLists.splice(foundItem, 1);
+    items.splice(foundItem, 1);
     res.json({ message: "Deleted" })    
 });
 
