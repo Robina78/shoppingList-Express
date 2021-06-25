@@ -4,10 +4,10 @@ const request = require("supertest");
 const app = require("./app");
 const items = require("./fakeDb")
 
-let apples = { name: "Apple", price: 2.69};
+let item = { name: "Apple", price: 2.69};
 
 beforeEach(function() {
-    items.push(apples);
+    items.push(item);
 });
 
 afterEach(function() {    
@@ -19,16 +19,16 @@ describe("GET /items", function() {
     test("Gets a item of shopping lists", async function() {
         const resp = await request(app).get(`/items`);
         expect(resp.statusCode).toBe(200);
-        expect(resp.body).toEqual({shoppingList: [apples]})
+        expect(resp.body).toEqual({items: [item]})
     });
 });
 
 // GET /items/:name
 describe("Get /items/:name", function() {
     test("Gets a single item", async function() {
-        const resp = await request(app).get(`/items/${apples.name}`);
+        const resp = await request(app).get(`/items/${item.name}`);
         expect(resp.statusCode).toBe(200);
-        expect(resp.body).toEqual({shoppinList: [apples]});
+        expect(resp.body.item).toEqual({name: "Apple", price: 2.69});
     });
     test("Responds with 404 if can't find item", async function() {
         const resp = await request(app).get(`/items/0`);
@@ -49,19 +49,14 @@ describe("Post /items", function() {
         expect(resp.body).toEqual({
             shoppingList: {name:"lettuce", price: 1.3}
         });
-    });
-
-    test("Responds with 404 if id invalid", async function() {
-        const resp = await (await request(app).post("/items")).setEncoding({})
-        expect(resp.statusCode).toBe(404);
-    });
+    });    
 });
 
 //PATCH /items/:name
 describe("Patch /items/:name", function() {
     test("Updates a single item", async function(){
         const resp = await request(app)
-        .patch(`/items/${apples.name}`)
+        .patch(`/items/${item.name}`)
         .send({
             name: "pear",
             price: 2.4          
@@ -81,7 +76,7 @@ describe("Patch /items/:name", function() {
 //DELETE /items/:name
 describe("Delete /items/:name", function() {
     test("Deletes a single item", async function() {
-        const resp = await request(app).delete(`/items/${apples.name}`);
+        const resp = await request(app).delete(`/items/${item.name}`);
         expect(resp.statusCode).toBe(200);
         expect(resp.body).toEqual({ message: "Deleted" })
     });
