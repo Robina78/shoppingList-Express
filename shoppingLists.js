@@ -15,8 +15,7 @@ router.post("/", (req, res) => {
 
 router.get("/:name", (req, res) => {
     const foundItem = items.find(item => item.name === req.params.name);
-    if(foundItem === undefined) {
-        console.log(foundItem)
+    if(foundItem === undefined) {       
         throw new ExpressError("Item not found", 404)
     }
     res.json({ shoppingList: foundItem })

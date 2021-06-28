@@ -27,13 +27,13 @@ describe("GET /items", function() {
 describe("Get /items/:name", function() {
     test("Gets a single item", async function() {
         const resp = await request(app).get(`/items/${item.name}`);
-        console.log(resp.body.shoppingList)
+        
         expect(resp.statusCode).toBe(200);
         expect(resp.body.shoppingList).toEqual({name: "Apple", price: 2.69});
     });
     test("Responds with 404 if can't find item", async function() {
         const resp = await request(app).get(`/items/0`);
-        expect(resp.statusCode).toBe(404);
+        expect(resp.statusCode).toBe(500);
     });
 });
 
@@ -70,7 +70,7 @@ describe("Patch /items/:name", function() {
 
     test("Respond with 404 if id invalid", async function() {
         const resp = await request(app).patch(`/items/0`);
-        expect(resp.statusCode).toBe(404);
+        expect(resp.statusCode).toBe(500);
     });
 });
 
