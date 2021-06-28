@@ -27,8 +27,9 @@ describe("GET /items", function() {
 describe("Get /items/:name", function() {
     test("Gets a single item", async function() {
         const resp = await request(app).get(`/items/${item.name}`);
+        console.log(resp.body.shoppingList)
         expect(resp.statusCode).toBe(200);
-        expect(resp.body.item).toEqual({name: "Apple", price: 2.69});
+        expect(resp.body.shoppingList).toEqual({name: "Apple", price: 2.69});
     });
     test("Responds with 404 if can't find item", async function() {
         const resp = await request(app).get(`/items/0`);
